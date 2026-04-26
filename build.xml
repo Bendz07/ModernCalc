@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- NetBeans Ant build file for Calculator project -->
+<project name="Calculator" default="default" basedir=".">
+    <description>Builds, tests, and runs the Calculator project.</description>
+
+    <property name="src.dir"          value="src"/>
+    <property name="build.dir"        value="build"/>
+    <property name="dist.dir"         value="dist"/>
+    <property name="main.class"       value="calculator.Main"/>
+    <property name="javac.source"     value="11"/>
+    <property name="javac.target"     value="11"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="dist.jar"         value="${dist.dir}/Calculator.jar"/>
+
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="init" description="Compile source files">
+        <javac srcdir="${src.dir}"
+               destdir="${build.classes.dir}"
+               source="${javac.source}"
+               target="${javac.target}"
+               includeantruntime="false"
+               encoding="UTF-8">
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="Create executable JAR">
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+        </jar>
+        <echo>JAR created: ${dist.jar}</echo>
+    </target>
+
+    <target name="run" depends="compile" description="Run the application">
+        <java classname="${main.class}" fork="true">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+            <jvmarg value="-Dawt.useSystemAAFontSettings=lcd"/>
+            <jvmarg value="-Dswing.aatext=true"/>
+        </java>
+    </target>
+
+    <target name="clean" description="Clean build artifacts">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="default" depends="jar"/>
+</project>
